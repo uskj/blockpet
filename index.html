@@ -14,20 +14,21 @@
         .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; }
         .btn-success { background: linear-gradient(135deg, #4caf50 0%, #45a049 100%); color: #fff; }
         .btn-gold { background: linear-gradient(135deg, #ffd700 0%, #ffb300 100%); color: #1a1a2e; }
+        .btn-random { background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%); color: #fff; }
         .hidden { display: none !important; }
         .card { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 20px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.1); }
         input[type="text"] { width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
         input[type="text"]:focus { border-color: #4a9eff; }
         label { color: #aaa; font-size: 12px; margin-top: 15px; display: block; }
-        .color-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin: 10px 0; }
+        .color-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin: 10px 0; }
         .color-option { aspect-ratio: 1; border-radius: 8px; cursor: pointer; border: 3px solid transparent; transition: all 0.2s; }
         .color-option:hover { transform: scale(1.1); }
         .color-option.selected { border-color: #fff; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
-        .accessory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 10px 0; }
-        .accessory-option { padding: 12px 8px; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); border-radius: 8px; text-align: center; cursor: pointer; transition: all 0.2s; font-size: 12px; }
+        .accessory-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 10px 0; }
+        .accessory-option { padding: 10px 5px; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); border-radius: 8px; text-align: center; cursor: pointer; transition: all 0.2s; font-size: 11px; }
         .accessory-option:hover { border-color: #4a9eff; }
         .accessory-option.selected { border-color: #4a9eff; background: rgba(74,158,255,0.2); }
-        .accessory-option .emoji { font-size: 24px; display: block; margin-bottom: 4px; }
+        .accessory-option .emoji { font-size: 22px; display: block; margin-bottom: 2px; }
         .chat-box { height: 250px; overflow-y: auto; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
         .message { margin-bottom: 10px; padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.5; }
         .message.user { background: #4a9eff; color: #fff; margin-left: 20%; border-radius: 12px 12px 0 12px; }
@@ -67,6 +68,7 @@
         .lock-overlay { position: relative; overflow: hidden; }
         .lock-overlay::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(26,26,46,0.7); border-radius: 16px; z-index: 1; }
         .lock-content { position: relative; z-index: 2; text-align: center; padding: 20px; }
+        .random-hint { font-size: 11px; color: #888; margin-top: 5px; text-align: center; }
     </style>
 </head>
 <body>
@@ -92,8 +94,12 @@
                 <input type="text" id="nameInput" placeholder="给你的宠物起个名字..." maxlength="10">
                 <label>选择颜色</label>
                 <div class="color-grid" id="colorGrid"></div>
+                <button class="btn btn-random" onclick="randomColor()" style="margin-top:10px;font-size:14px;">🎲 随机颜色</button>
+                <p class="random-hint">或点击按钮随机生成</p>
                 <label>选择配饰</label>
                 <div class="accessory-grid" id="accessoryGrid"></div>
+                <button class="btn btn-random" onclick="randomAccessory()" style="margin-top:10px;font-size:14px;">🎲 随机配饰</button>
+                <p class="random-hint">或点击按钮随机生成</p>
                 <button class="btn btn-success" onclick="previewPet()" style="margin-top:20px;">🔍 预览外观</button>
                 <button class="btn btn-secondary" onclick="backToHome()">返回</button>
             </div>
@@ -193,13 +199,18 @@
         var AGNES_API_KEY = 'sk-UMO0xnCQNlCoJd8AKbnhejVNdEdr4cXsUEg24RiSHnspeMmj';
         var AGNES_MODEL = 'agnes-2.5-flash';
         
-        var COLORS = ['#ff6b6b','#ee5a5a','#4ecdc4','#45b7d1','#96ceb4','#27ae60','#ffeaa7','#f1c40f','#dda0dd','#9b59b6','#85c1e9','#5dade2'];
+        var COLORS = ['#ff6b6b','#ee5a5a','#4ecdc4','#45b7d1','#96ceb4','#27ae60','#ffeaa7','#f1c40f','#dda0dd','#9b59b6','#85c1e9','#5dade2','#e74c3c','#3498db','#2ecc71','#f39c12','#9b59b6','#1abc9c','#e67e22','#2c3e50'];
         var ACCESSORIES = [
             { id: 'none', name: '无', emoji: '❌' },
             { id: 'hat', name: '帽子', emoji: '🎩' },
             { id: 'glasses', name: '眼镜', emoji: '👓' },
             { id: 'bow', name: '蝴蝶结', emoji: '🎀' },
-            { id: 'crown', name: '皇冠', emoji: '👑' }
+            { id: 'crown', name: '皇冠', emoji: '👑' },
+            { id: 'star', name: '星星', emoji: '⭐' },
+            { id: 'heart', name: '爱心', emoji: '❤️' },
+            { id: 'moon', name: '月亮', emoji: '🌙' },
+            { id: 'sun', name: '太阳', emoji: '☀️' },
+            { id: 'flower', name: '花朵', emoji: '🌸' }
         ];
 
         function init() {
@@ -238,6 +249,28 @@
             loadPets();
         }
 
+        window.randomColor = function() {
+            var randomIdx = Math.floor(Math.random() * COLORS.length);
+            var color = COLORS[randomIdx];
+            petState.color = color;
+            document.querySelectorAll('.color-option').forEach(function(el, idx) {
+                el.classList.toggle('selected', idx === randomIdx);
+            });
+            updatePreview();
+            showNotification('🎨 随机颜色：' + color);
+        };
+
+        window.randomAccessory = function() {
+            var randomIdx = Math.floor(Math.random() * ACCESSORIES.length);
+            var acc = ACCESSORIES[randomIdx];
+            petState.accessory = acc.id;
+            document.querySelectorAll('.accessory-option').forEach(function(el, idx) {
+                el.classList.toggle('selected', idx === randomIdx);
+            });
+            updatePreview();
+            showNotification('✨ 随机配饰：' + acc.name);
+        };
+
         function darkenColor(hex, percent) {
             var num = parseInt(hex.replace('#',''), 16);
             var amt = Math.round(2.55 * percent);
@@ -255,10 +288,21 @@
                     pixel.className = 'pixel';
                     var bg = baseColor;
                     if (isFront) {
+                        // 脸部图案
                         if ((row === 3 || row === 4) && (col === 2 || col === 3 || col === 6 || col === 7)) {
                             bg = row === 4 ? '#111' : '#fff';
                         }
                         if (row === 7 && col >= 3 && col <= 6) bg = '#e94560';
+                        // 配饰显示在前面
+                        if (petState.accessory === 'hat' && row === 1 && col >= 3 && col <= 6) bg = '#ffd700';
+                        if (petState.accessory === 'glasses' && ((row === 3 && col >= 1 && col <= 4) || (row === 3 && col >= 5 && col <= 8))) bg = '#333';
+                        if (petState.accessory === 'bow' && row === 2 && col >= 4 && col <= 5) bg = '#ff6b9d';
+                        if (petState.accessory === 'crown' && row === 1 && col >= 2 && col <= 7) bg = '#ffd700';
+                        if (petState.accessory === 'star' && row === 0 && col === 4) bg = '#ffd700';
+                        if (petState.accessory === 'heart' && row === 5 && col === 4) bg = '#e94560';
+                        if (petState.accessory === 'moon' && row === 2 && col === 7) bg = '#f1c40f';
+                        if (petState.accessory === 'sun' && row === 1 && col === 7) bg = '#f39c12';
+                        if (petState.accessory === 'flower' && row === 6 && col === 4) bg = '#e91e63';
                     }
                     pixel.style.background = bg;
                     element.appendChild(pixel);
@@ -326,7 +370,11 @@
                         var div = document.createElement('div');
                         div.className = 'task-item';
                         div.style.cursor = 'pointer';
-                        div.innerHTML = '<div style="width:40px;height:40px;background:' + p.color + ';border-radius:8px;"></div><span style="flex:1;">' + p.name + '</span><span style="color:#888;font-size:12px;">Lv.' + p.level + (p.member ? ' 💎' : '') + '</span>';
+                        var accName = '';
+                        for (var j = 0; j < ACCESSORIES.length; j++) {
+                            if (ACCESSORIES[j].id === p.accessory) { accName = ACCESSORIES[j].emoji; break; }
+                        }
+                        div.innerHTML = '<div style="width:40px;height:40px;background:' + p.color + ';border-radius:8px;position:relative;"><span style="position:absolute;top:-5px;right:-5px;font-size:16px;">' + accName + '</span></div><span style="flex:1;">' + p.name + '</span><span style="color:#888;font-size:12px;">Lv.' + p.level + '</span>';
                         div.onclick = function() { selectPet(idx); };
                         list.appendChild(div);
                     })(pets[i], i);
@@ -390,11 +438,6 @@
 
         window.confirmPurchase = function() {
             if (!petState.selectedPlan) { alert('请选择套餐'); return; }
-            var plan = petState.selectedPlan;
-            var amount = plan === 'monthly' ? '¥9.9' : '¥25';
-            var desc = plan === 'monthly' ? '月卡' : '年卡';
-            
-            // 模拟支付成功
             petState.member = true;
             savePets();
             closeShop();
