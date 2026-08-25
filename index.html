@@ -63,7 +63,7 @@
         <header>
             <h1>⬛ BlockPet ⬛</h1>
             <p class="subtitle">AI情绪宠物 · powered by OpenCode Zen</p>
-            <div id="status" class="status">🟢 已连接 OpenCode Zen</div>
+            <div id="status" class="status">🟢 已连接 Agnes AI</div>
         </header>
         
         <div id="homePage">
@@ -147,8 +147,10 @@
         let currentPetIndex = 0;
         let chatHistory = [];
         
-        const OPENCODE_ZEN_URL = 'https://opencode.ai/zen/v1/chat/completions';
-        const OPENCODE_MODEL = 'nemotron-3-ultra-free';
+        // Agnes AI API 配置
+        const AGNES_API_URL = 'https://api.agnes-ai.cn/v1/chat/completions';
+        const AGNES_API_KEY = 'sk-UMO0xnCQNlCoJd8AKbnhejVNdEdr4cXsUEg24RiSHnspeMmj';
+        const AGNES_MODEL = 'agnes-2.5-flash';
 
         const COLORS = ['#ff6b6b','#ee5a5a','#4ecdc4','#45b7d1','#96ceb4','#27ae60','#ffeaa7','#f1c40f','#dda0dd','#9b59b6','#85c1e9','#5dade2'];
         const ACCESSORIES = [
@@ -380,11 +382,14 @@
             try {
                 const systemPrompt = `你是${petState.name}，一个可爱的像素方块宠物。你会陪伴用户学习工作，提供情绪价值，温暖有趣。用中文回复，简短可爱。`;
 
-                const r = await fetch(OPENCODE_ZEN_URL, {
+                const r = await fetch(AGNES_API_URL, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${AGNES_API_KEY}`
+                    },
                     body: JSON.stringify({
-                        model: OPENCODE_MODEL,
+                        model: AGNES_MODEL,
                         messages: [
                             { role: 'system', content: systemPrompt },
                             ...chatHistory,
