@@ -3,50 +3,471 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BlockPet v2</title>
+    <title>BlockPet v3</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: sans-serif; background: #1a1a2e; min-height: 100vh; color: #fff; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; color: #fff; }
         .container { max-width: 480px; margin: 0 auto; padding: 20px; }
-        button { cursor: pointer; }
-        .btn { padding: 14px 20px; border: none; border-radius: 8px; font-size: 16px; background: #4a9eff; color: #fff; margin: 10px 0; width: 100%; }
+        header { text-align: center; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; }
+        h1 { font-size: 28px; margin-bottom: 5px; }
+        .subtitle { color: #888; font-size: 14px; }
+        .cube-container { width: 200px; height: 200px; margin: 30px auto; perspective: 600px; }
+        .cube { width: 100px; height: 100px; position: relative; transform-style: preserve-3d; transform: rotateX(-25deg) rotateY(-45deg); animation: rotate 8s infinite linear; margin: 50px auto; }
+        @keyframes rotate { from { transform: rotateX(-25deg) rotateY(0deg); } to { transform: rotateX(-25deg) rotateY(360deg); } }
+        .face { position: absolute; width: 100px; height: 100px; display: grid; grid-template-columns: repeat(10, 1fr); grid-template-rows: repeat(10, 1fr); border: 1px solid rgba(0,0,0,0.3); }
+        .pixel { width: 100%; height: 100%; }
+        .front { transform: translateZ(50px); }
+        .back { transform: rotateY(180deg) translateZ(50px); }
+        .right { transform: rotateY(90deg) translateZ(50px); }
+        .left { transform: rotateY(-90deg) translateZ(50px); }
+        .top { transform: rotateX(90deg) translateZ(50px); }
+        .bottom { transform: rotateX(-90deg) translateZ(50px); }
+        .card { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 20px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.1); }
+        .card-title { font-size: 16px; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        input[type="text"] { width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
+        input[type="text"]:focus { border-color: #4a9eff; }
+        .btn { width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-top: 10px; }
+        .btn-primary { background: linear-gradient(135deg, #4a9eff 0%, #357abd 100%); color: #fff; }
+        .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; }
+        .btn-success { background: linear-gradient(135deg, #4caf50 0%, #45a049 100%); color: #fff; }
+        .color-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin: 10px 0; }
+        .color-option { aspect-ratio: 1; border-radius: 8px; cursor: pointer; border: 3px solid transparent; transition: all 0.2s; }
+        .color-option:hover { transform: scale(1.1); }
+        .color-option.selected { border-color: #fff; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        .accessory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 10px 0; }
+        .accessory-option { padding: 12px 8px; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); border-radius: 8px; text-align: center; cursor: pointer; transition: all 0.2s; font-size: 12px; }
+        .accessory-option:hover { border-color: #4a9eff; }
+        .accessory-option.selected { border-color: #4a9eff; background: rgba(74,158,255,0.2); }
+        .accessory-option .emoji { font-size: 24px; display: block; margin-bottom: 4px; }
+        .chat-box { height: 300px; overflow-y: auto; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+        .message { margin-bottom: 12px; padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.5; white-space: pre-wrap; }
+        .message.user { background: linear-gradient(135deg, #4a9eff 0%, #357abd 100%); color: #fff; margin-left: 20%; border-radius: 12px 12px 0 12px; }
+        .message.pet { background: rgba(255,255,255,0.1); color: #ddd; margin-right: 20%; border-radius: 12px 12px 12px 0; }
+        .message.thinking { background: rgba(255,255,255,0.05); color: #888; font-style: italic; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+        .tab { flex: 1; padding: 12px; background: rgba(255,255,255,0.05); border: none; border-radius: 8px; color: #888; font-size: 14px; cursor: pointer; transition: all 0.2s; }
+        .tab.active { background: linear-gradient(135deg, #4a9eff 0%, #357abd 100%); color: #fff; }
+        .task-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 8px; }
+        .task-item.completed { opacity: 0.5; }
+        .pet-info { text-align: center; margin: 20px 0; }
+        .pet-name { font-size: 24px; font-weight: 700; margin-bottom: 5px; }
+        .pet-level { color: #ffd700; font-size: 14px; }
         .hidden { display: none !important; }
+        .notification { position: fixed; top: 20px; right: 20px; background: linear-gradient(135deg, #4a9eff 0%, #357abd 100%); color: #fff; padding: 12px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); display: none; z-index: 1000; }
+        label { color: #aaa; font-size: 12px; margin-bottom: 8px; display: block; }
+        .status { font-size: 12px; color: #4caf50; text-align: center; margin-top: 10px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>BlockPet v2</h1>
-        <div id="page1">
-            <p>这是首页</p>
-            <button class="btn" onclick="showPage2()">创建宠物</button>
+        <header>
+            <h1>⬛ BlockPet ⬛</h1>
+            <p class="subtitle">AI情绪宠物 · powered by Agnes AI</p>
+            <div id="status" class="status">🟢 已连接 Agnes AI</div>
+        </header>
+        
+        <div id="homePage">
+            <div class="card">
+                <div class="card-title">🏠 我的方块宠物</div>
+                <div id="petList" style="margin-bottom:20px;"></div>
+                <button class="btn btn-primary" onclick="showCreatePet()">➕ 创建新宠物</button>
+            </div>
         </div>
-        <div id="page2" class="hidden">
-            <p>这是创建页面</p>
-            <input type="text" id="nameInput" placeholder="输入名字">
-            <button class="btn" onclick="confirmCreate()">确认</button>
-            <button class="btn" onclick="showPage1()" style="background:#666;">返回</button>
+        
+        <div id="creationPhase" class="hidden">
+            <div class="card">
+                <div class="card-title">📝 创建你的方块宠</div>
+                <label>名字</label>
+                <input type="text" id="nameInput" placeholder="给你的宠物起个名字..." maxlength="10">
+                <label style="margin-top:15px;">选择颜色</label>
+                <div class="color-grid" id="colorGrid"></div>
+                <label style="margin-top:15px;">选择配饰</label>
+                <div class="accessory-grid" id="accessoryGrid"></div>
+                <button class="btn btn-primary" onclick="previewPet()" style="margin-top:20px;">🔍 预览外观</button>
+            </div>
         </div>
-        <div id="page3" class="hidden">
-            <p>宠物创建成功！</p>
-            <p id="petName"></p>
+        
+        <div id="previewPhase" class="hidden">
+            <div class="card">
+                <div class="card-title">👁️ 预览</div>
+                <div class="cube-container">
+                    <div class="cube" id="previewCube">
+                        <div class="face front" id="previewFront"></div>
+                        <div class="face back" id="previewBack"></div>
+                        <div class="face right" id="previewRight"></div>
+                        <div class="face left" id="previewLeft"></div>
+                        <div class="face top" id="previewTop"></div>
+                        <div class="face bottom" id="previewBottom"></div>
+                    </div>
+                </div>
+                <div class="pet-info"><div class="pet-name" id="previewName">方块宠</div></div>
+                <button class="btn btn-success" onclick="confirmCreation()">✅ 确认创建</button>
+                <button class="btn btn-secondary" onclick="backToEdit()">✏️ 返回修改</button>
+            </div>
+        </div>
+        
+        <div id="mainApp" class="hidden">
+            <div class="cube-container">
+                <div class="cube" id="mainCube">
+                    <div class="face front" id="mainFront"></div>
+                    <div class="face back" id="mainBack"></div>
+                    <div class="face right" id="mainRight"></div>
+                    <div class="face left" id="mainLeft"></div>
+                    <div class="face top" id="mainTop"></div>
+                    <div class="face bottom" id="mainBottom"></div>
+                </div>
+            </div>
+            <div class="pet-info">
+                <div class="pet-name" id="mainName">方块宠</div>
+                <div class="pet-level">Lv.<span id="mainLevel">1</span></div>
+            </div>
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('chat')">💬 聊天</button>
+                <button class="tab" onclick="switchTab('tasks')">📋 任务</button>
+            </div>
+            <div id="chatTab" class="card">
+                <div class="chat-box" id="chatBox"></div>
+                <input type="text" id="chatInput" placeholder="输入消息... (回车发送)" onkeypress="if(event.key==='Enter')sendChat()">
+            </div>
+            <div id="tasksTab" class="card hidden">
+                <div class="card-title">📋 我的任务</div>
+                <div style="display:flex;gap:10px;margin-bottom:15px;">
+                    <input type="text" id="taskInput" placeholder="添加新任务..." style="flex:1;">
+                    <button onclick="addTask()" class="btn btn-success" style="width:auto;margin-top:0;">添加</button>
+                </div>
+                <div id="taskList"></div>
+            </div>
         </div>
     </div>
+    <div class="notification" id="notification"></div>
+
     <script>
-        function showPage2() {
-            document.getElementById('page1').classList.add('hidden');
-            document.getElementById('page2').classList.remove('hidden');
+        let petState = { name: '', color: '#ff6b6b', accessory: 'none', level: 1, tasks: [] };
+        let chatCount = 0;
+        let currentPetIndex = 0;
+        let chatHistory = [];
+        
+        const AGNES_API_URL = 'https://api.agnes-ai.cn/v1/chat/completions';
+        const AGNES_API_KEY = 'sk-UMO0xnCQNlCoJd8AKbnhejVNdEdr4cXsUEg24RiSHnspeMmj';
+        const AGNES_MODEL = 'agnes-2.5-flash';
+
+        const COLORS = ['#ff6b6b','#ee5a5a','#4ecdc4','#45b7d1','#96ceb4','#27ae60','#ffeaa7','#f1c40f','#dda0dd','#9b59b6','#85c1e9','#5dade2'];
+        const ACCESSORIES = [
+            { id: 'none', name: '无', emoji: '❌' },
+            { id: 'hat', name: '帽子', emoji: '🎩' },
+            { id: 'glasses', name: '眼镜', emoji: '👓' },
+            { id: 'bow', name: '蝴蝶结', emoji: '🎀' },
+            { id: 'crown', name: '皇冠', emoji: '👑' }
+        ];
+        
+        function init() {
+            renderColorGrid();
+            renderAccessoryGrid();
+            loadPets();
         }
-        function showPage1() {
-            document.getElementById('page2').classList.add('hidden');
-            document.getElementById('page1').classList.remove('hidden');
+        
+        function renderColorGrid() {
+            document.getElementById('colorGrid').innerHTML = COLORS.map((c, i) => 
+                `<div class="color-option ${i===0?'selected':''}" style="background:${c};" onclick="selectColor('${c}',this)"></div>`
+            ).join('');
         }
-        function confirmCreate() {
+        
+        function selectColor(color, el) {
+            document.querySelectorAll('.color-option').forEach(e => e.classList.remove('selected'));
+            el.classList.add('selected');
+            petState.color = color;
+            updatePreview();
+        }
+        
+        function renderAccessoryGrid() {
+            document.getElementById('accessoryGrid').innerHTML = ACCESSORIES.map(acc => 
+                `<div class="accessory-option ${acc.id==='none'?'selected':''}" onclick="selectAccessory('${acc.id}',this)">
+                    <span class="emoji">${acc.emoji}</span>${acc.name}
+                </div>`
+            ).join('');
+        }
+        
+        function selectAccessory(id, el) {
+            document.querySelectorAll('.accessory-option').forEach(e => e.classList.remove('selected'));
+            el.classList.add('selected');
+            petState.accessory = id;
+            updatePreview();
+        }
+        
+        function darkenColor(hex, percent) {
+            const num = parseInt(hex.replace('#',''), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = Math.max(0, (num >> 16) - amt);
+            const G = Math.max(0, ((num >> 8) & 0xFF) - amt);
+            const B = Math.max(0, (num & 0xFF) - amt);
+            return '#' + (0x1000000 + R*0x10000 + G*0x100 + B).toString(16).slice(1);
+        }
+        
+        function renderFace(element, baseColor) {
+            element.innerHTML = '';
+            for (let row = 0; row < 10; row++) {
+                for (let col = 0; col < 10; col++) {
+                    const pixel = document.createElement('div');
+                    pixel.className = 'pixel';
+                    let bg = baseColor;
+                    if (element.id.includes('Front')) {
+                        if ((row === 3 || row === 4) && (col === 2 || col === 3 || col === 6 || col === 7)) {
+                            bg = row === 4 ? '#111' : '#fff';
+                        }
+                        if (row === 7 && col >= 3 && col <= 6) bg = '#e94560';
+                    }
+                    pixel.style.background = bg;
+                    element.appendChild(pixel);
+                }
+            }
+        }
+        
+        function updatePreview() {
+            const faces = ['previewFront','previewBack','previewRight','previewLeft','previewTop','previewBottom'];
+            const colors = [petState.color, darkenColor(petState.color,10), darkenColor(petState.color,20),
+                           darkenColor(petState.color,10), darkenColor(petState.color,25), darkenColor(petState.color,30)];
+            faces.forEach((id, i) => {
+                const el = document.getElementById(id);
+                if (el) renderFace(el, colors[i]);
+            });
             const name = document.getElementById('nameInput').value;
-            if (!name) { alert('请输入名字'); return; }
-            document.getElementById('page2').classList.add('hidden');
-            document.getElementById('page3').classList.remove('hidden');
-            document.getElementById('petName').textContent = '宠物名：' + name;
+            document.getElementById('previewName').textContent = name || '方块宠';
         }
+        
+        function loadPets() {
+            const pets = JSON.parse(localStorage.getItem('blockpet_all') || '[]');
+            const list = document.getElementById('petList');
+            if (pets.length === 0) {
+                list.innerHTML = '<p style="color:#888;text-align:center;padding:20px;">还没有宠物，创建一个吧！</p>';
+            } else {
+                list.innerHTML = pets.map((p, i) => `
+                    <div class="task-item" onclick="selectPet(${i})" style="cursor:pointer;">
+                        <div style="width:40px;height:40px;background:${p.color};border-radius:8px;"></div>
+                        <span style="flex:1;">${p.name}</span>
+                        <button onclick="event.stopPropagation();deletePet(${i})" style="background:none;border:none;color:#e94560;cursor:pointer;font-size:18px;">×</button>
+                    </div>
+                ).join('');
+            }
+            if (pets.length > 0 && !petState.name) selectPet(0);
+        }
+        
+        function selectPet(index) {
+            const pets = JSON.parse(localStorage.getItem('blockpet_all') || '[]');
+            if (pets[index]) {
+                petState = pets[index];
+                currentPetIndex = index;
+                chatHistory = [];
+                document.getElementById('homePage').classList.add('hidden');
+                document.getElementById('mainApp').classList.remove('hidden');
+                updateMainDisplay();
+                addSystemMessage(`你好！我是 ${petState.name}，你的专属方块宠物！✨\n\n我会陪你聊天~`);
+            }
+        }
+        
+        function deletePet(index) {
+            if (!confirm('确定要删除这个宠物吗？')) return;
+            const pets = JSON.parse(localStorage.getItem('blockpet_all') || '[]');
+            pets.splice(index, 1);
+            localStorage.setItem('blockpet_all', JSON.stringify(pets));
+            loadPets();
+        }
+        
+        function showCreatePet() {
+            document.getElementById('homePage').classList.add('hidden');
+            document.getElementById('creationPhase').classList.remove('hidden');
+            document.getElementById('nameInput').value = '';
+            petState = { name: '', color: '#ff6b6b', accessory: 'none', level: 1, tasks: [] };
+        }
+        
+        function previewPet() {
+            const name = document.getElementById('nameInput').value.trim();
+            if (!name) { showNotification('请先给宠物起个名字！'); return; }
+            petState.name = name;
+            document.getElementById('creationPhase').classList.add('hidden');
+            document.getElementById('previewPhase').classList.remove('hidden');
+            updatePreview();
+        }
+        
+        function backToEdit() {
+            document.getElementById('previewPhase').classList.add('hidden');
+            document.getElementById('creationPhase').classList.remove('hidden');
+        }
+        
+        function confirmCreation() {
+            showNotification('宠物创建成功！');
+            document.getElementById('previewPhase').classList.add('hidden');
+            document.getElementById('homePage').classList.remove('hidden');
+            const pets = JSON.parse(localStorage.getItem('blockpet_all') || '[]');
+            pets.push(petState);
+            localStorage.setItem('blockpet_all', JSON.stringify(pets));
+            loadPets();
+        }
+        
+        function switchTab(tab) {
+            document.getElementById('chatTab').classList.toggle('hidden', tab !== 'chat');
+            document.getElementById('tasksTab').classList.toggle('hidden', tab !== 'tasks');
+            document.querySelectorAll('.tab').forEach((btn, i) => {
+                btn.classList.toggle('active', (tab === 'chat' && i === 0) || (tab === 'tasks' && i === 1));
+            });
+        }
+        
+        function addTask() {
+            const input = document.getElementById('taskInput');
+            const task = input.value.trim();
+            if (!task) return;
+            petState.tasks.push({ id: Date.now(), text: task, completed: false });
+            input.value = '';
+            savePets();
+            renderTasks();
+            showNotification('任务已添加！');
+        }
+        
+        function renderTasks() {
+            const list = document.getElementById('taskList');
+            if (!list) return;
+            if (petState.tasks.length === 0) {
+                list.innerHTML = '<div style="text-align:center;color:#666;padding:20px;">还没有任务，添加一个吧！</div>';
+                return;
+            }
+            list.innerHTML = petState.tasks.map(task => `
+                <div class="task-item ${task.completed ? 'completed' : ''}">
+                    <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask(${task.id})" style="width:18px;height:18px;cursor:pointer;">
+                    <span style="text-decoration:${task.completed ? 'line-through' : 'none'};color:${task.completed ? '#666' : '#fff'};">${task.text}</span>
+                    <button onclick="deleteTask(${task.id})" style="background:none;border:none;color:#e94560;cursor:pointer;font-size:18px;">×</button>
+                </div>
+            ).join('');
+        }
+        
+        function toggleTask(id) {
+            const task = petState.tasks.find(t => t.id === id);
+            if (task) {
+                task.completed = !task.completed;
+                if (task.completed) {
+                    petState.level++;
+                    showNotification('任务完成！升级了！Lv.' + petState.level);
+                }
+                savePets();
+                renderTasks();
+                updateMainDisplay();
+            }
+        }
+        
+        function deleteTask(id) {
+            petState.tasks = petState.tasks.filter(t => t.id !== id);
+            savePets();
+            renderTasks();
+        }
+        
+        function savePets() {
+            const pets = JSON.parse(localStorage.getItem('blockpet_all') || '[]');
+            pets[currentPetIndex] = petState;
+            localStorage.setItem('blockpet_all', JSON.stringify(pets));
+        }
+        
+        async function sendChat() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            addUserMessage(message);
+            input.value = '';
+            
+            const thinkingMsg = document.createElement('div');
+            thinkingMsg.className = 'message thinking';
+            thinkingMsg.textContent = '💭 思考中...';
+            document.getElementById('chatBox').appendChild(thinkingMsg);
+            scrollChat();
+            
+            try {
+                const systemPrompt = `你是${petState.name}，一个可爱的像素方块宠物。你会陪伴用户学习工作，提供情绪价值，温暖有趣。用中文回复，简短可爱。`;
+
+                const r = await fetch(AGNES_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${AGNES_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: AGNES_MODEL,
+                        messages: [
+                            { role: 'system', content: systemPrompt },
+                            ...chatHistory,
+                            { role: 'user', content: message }
+                        ]
+                    })
+                });
+                const d = await r.json();
+                thinkingMsg.remove();
+
+                const reply = d?.choices?.[0]?.message?.content || '...';
+                chatHistory.push({ role: 'user', content: message });
+                chatHistory.push({ role: 'assistant', content: reply });
+                addPetMessage(reply);
+                chatCount++;
+                
+                if (petState.tasks.length > 0 && chatCount % 10 === 0) {
+                    const pending = petState.tasks.filter(t => !t.completed);
+                    if (pending.length > 0) {
+                        setTimeout(() => {
+                            const randomTask = pending[Math.floor(Math.random() * pending.length)];
+                            addPetMessage(`对了...你的任务「${randomTask.text}」还没完成哦~`);
+                        }, 1000);
+                    }
+                }
+            } catch(e) {
+                thinkingMsg.remove();
+                addPetMessage('网络错误，请稍后重试~');
+                console.error('Error:', e);
+            }
+        }
+        
+        function addUserMessage(text) {
+            const chatBox = document.getElementById('chatBox');
+            const msg = document.createElement('div');
+            msg.className = 'message user';
+            msg.textContent = text;
+            chatBox.appendChild(msg);
+            scrollChat();
+        }
+        
+        function addPetMessage(text) {
+            const chatBox = document.getElementById('chatBox');
+            const msg = document.createElement('div');
+            msg.className = 'message pet';
+            msg.textContent = text;
+            chatBox.appendChild(msg);
+            scrollChat();
+        }
+        
+        function addSystemMessage(text) {
+            addPetMessage(text);
+        }
+        
+        function scrollChat() {
+            const chatBox = document.getElementById('chatBox');
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+        
+        function updateMainDisplay() {
+            const faces = ['mainFront','mainBack','mainRight','mainLeft','mainTop','mainBottom'];
+            const colors = [petState.color, darkenColor(petState.color,10), darkenColor(petState.color,20),
+                           darkenColor(petState.color,10), darkenColor(petState.color,25), darkenColor(petState.color,30)];
+            faces.forEach((id, i) => {
+                const el = document.getElementById(id);
+                if (el) renderFace(el, colors[i]);
+            });
+            document.getElementById('mainName').textContent = petState.name;
+            document.getElementById('mainLevel').textContent = petState.level;
+        }
+        
+        function showNotification(msg) {
+            const n = document.getElementById('notification');
+            n.textContent = msg;
+            n.style.display = 'block';
+            setTimeout(() => n.style.display = 'none', 2000);
+        }
+        
+        init();
     </script>
 </body>
 </html>
