@@ -3,41 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BlockPet v6<title>BlockPet v7 - powered by 漫庐</title>
+    <title>BlockPet - powered by 漫庐</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: sans-serif; background: #1a1a2e; min-height: 100vh; color: #fff; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; color: #fff; }
         .container { max-width: 480px; margin: 0 auto; padding: 20px; }
         button { cursor: pointer; }
-        .btn { padding: 14px 20px; border: none; border-radius: 8px; font-size: 16px; background: #4a9eff; color: #fff; margin: 10px 0; width: 100%; }
-        .btn-secondary { background: #666; }
-        .btn-success { background: #4caf50; }
+        .btn { padding: 14px 20px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; margin: 10px 0; width: 100%; }
+        .btn-primary { background: linear-gradient(135deg, #4a9eff 0%, #357abd 100%); color: #fff; }
+        .btn-success { background: linear-gradient(135deg, #4caf50 0%, #45a049 100%); color: #fff; }
+        .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; }
         .hidden { display: none !important; }
-        .card { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
-        input[type="text"] { width: 100%; padding: 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #fff; font-size: 14px; }
+        .card { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 20px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.1); }
+        input[type="text"] { width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
+        input[type="text"]:focus { border-color: #4a9eff; }
         label { color: #aaa; font-size: 12px; margin-top: 15px; display: block; }
+        .color-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 10px 0; }
+        .color-option { aspect-ratio: 1; border-radius: 8px; cursor: pointer; border: 3px solid transparent; transition: all 0.2s; }
+        .color-option:hover { transform: scale(1.1); }
+        .color-option.selected { border-color: #fff; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        .chat-box { height: 250px; overflow-y: auto; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+        .message { margin-bottom: 10px; padding: 10px 14px; border-radius: 12px; font-size: 14px; }
+        .message.user { background: #4a9eff; color: #fff; margin-left: 20%; border-radius: 12px 12px 0 12px; }
+        .message.pet { background: rgba(255,255,255,0.1); color: #ddd; margin-right: 20%; border-radius: 12px 12px 12px 0; }
+        .task-item { display: flex; align-items: center; gap: 10px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 8px; }
+        .task-item.completed { opacity: 0.5; text-decoration: line-through; }
+        .pet-info { text-align: center; margin: 20px 0; }
+        .pet-name { font-size: 24px; font-weight: 700; margin-bottom: 5px; }
+        .pet-level { color: #ffd700; font-size: 14px; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+        .tab { flex: 1; padding: 12px; background: rgba(255,255,255,0.05); border: none; border-radius: 8px; color: #888; font-size: 14px; cursor: pointer; }
+        .tab.active { background: #4a9eff; color: #fff; }
+        .notification { position: fixed; top: 20px; right: 20px; background: #4a9eff; color: #fff; padding: 12px 20px; border-radius: 8px; display: none; z-index: 1000; }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; }
+        .modal-content { background: #1a1a2e; border-radius: 16px; padding: 30px; max-width: 320px; text-align: center; }
+        .price-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
+        .price-item { background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 15px; cursor: pointer; transition: all 0.2s; }
+        .price-item:hover { border-color: #4a9eff; background: rgba(74,158,255,0.1); }
+        .price-item.selected { border-color: #4a9eff; background: rgba(74,158,255,0.2); }
+        .price-amount { font-size: 24px; font-weight: 700; color: #ffd700; }
+        .price-desc { font-size: 12px; color: #888; margin-top: 5px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>BlockPet v6</h1>
-        <p style="color:#888;margin-bottom:20px;">AI情绪宠物 · Agnes AI</p>
+        <header style="text-align:center;padding:20px 0;border-bottom:1px solid rgba(255,255,255,0.1);margin-bottom:20px;">
+            <h1>⬛ BlockPet ⬛</h1>
+            <p style="color:#888;font-size:14px;">powered by 漫庐</p>
+        </header>
         
         <div id="homePage">
             <div class="card">
-                <p>🏠 我的方块宠物</p>
-                <div id="petList" style="margin:15px 0;"></div>
-                <button class="btn" onclick="showCreatePet()">➕ 创建新宠物</button>
+                <p style="font-weight:600;margin-bottom:15px;">🏠 我的方块宠物</p>
+                <div id="petList" style="margin-bottom:20px;"></div>
+                <button class="btn btn-primary" onclick="showCreatePet()">➕ 创建新宠物</button>
             </div>
         </div>
         
         <div id="creationPhase" class="hidden">
             <div class="card">
-                <p>📝 创建你的方块宠</p>
+                <p style="font-weight:600;margin-bottom:15px;">📝 创建你的方块宠</p>
                 <label>名字</label>
-                <input type="text" id="nameInput" placeholder="给你的宠物起个名字...">
+                <input type="text" id="nameInput" placeholder="给你的宠物起个名字..." maxlength="10">
                 <label>选择颜色</label>
-                <div id="colorGrid" style="display:flex;gap:10px;flex-wrap:wrap;margin:10px 0;"></div>
+                <div id="colorGrid" class="color-grid"></div>
                 <button class="btn btn-success" onclick="previewPet()" style="margin-top:20px;">🔍 预览外观</button>
                 <button class="btn btn-secondary" onclick="backToHome()">返回</button>
             </div>
@@ -45,47 +74,94 @@
         
         <div id="previewPhase" class="hidden">
             <div class="card">
-                <p>👁️ 预览 - <span id="previewName"></span></p>
+                <p style="font-weight:600;margin-bottom:15px;">👁️ 预览</p>
+                <div id="previewColor" style="width:100px;height:100px;border-radius:12px;margin:20px auto;background:#ff6b6b;box-shadow:0 4px 20px rgba(0,0,0,0.3);"></div>
+                <p id="previewName" style="text-align:center;font-size:20px;margin-bottom:5px;"></p>
                 <button class="btn btn-success" onclick="confirmCreation()">✅ 确认创建</button>
                 <button class="btn btn-secondary" onclick="backToEdit()">✏️ 返回修改</button>
             </div>
         </div>
         
         <div id="mainApp" class="hidden">
-            <div class="card">
-                <p id="mainName" style="font-size:24px;text-align:center;margin-bottom:10px;"></p>
-                <p id="mainLevel" style="color:#ffd700;text-align:center;"></p>
+            <div class="pet-info">
+                <div id="petCube" style="width:100px;height:100px;border-radius:12px;margin:0 auto 10px;box-shadow:0 4px 20px rgba(0,0,0,0.3);"></div>
+                <div class="pet-name" id="mainName"></div>
+                <div class="pet-level">Lv.<span id="mainLevel"></span></div>
             </div>
-            <div class="card">
-                <p>💬 聊天</p>
-                <div id="chatBox" style="height:200px;overflow-y:auto;background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;margin:10px 0;"></div>
-                <input type="text" id="chatInput" placeholder="输入消息..." onkeypress="handleKeyPress(event)">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('chat')">💬 聊天</button>
+                <button class="tab" onclick="switchTab('tasks')">📋 任务</button>
+                <button class="tab" onclick="showShop()">🛒 商城</button>
+            </div>
+            <div id="chatTab" class="card">
+                <div id="chatBox" class="chat-box"></div>
+                <input type="text" id="chatInput" placeholder="输入消息... (回车发送)" onkeypress="handleKeyPress(event)">
+            </div>
+            <div id="tasksTab" class="card hidden">
+                <p style="font-weight:600;margin-bottom:15px;">📋 我的任务</p>
+                <div style="display:flex;gap:10px;margin-bottom:15px;">
+                    <input type="text" id="taskInput" placeholder="添加新任务..." style="flex:1;margin:0;">
+                    <button class="btn btn-success" onclick="addTask()" style="width:auto;margin:0;padding:12px 20px;">添加</button>
+                </div>
+                <div id="taskList"></div>
+            </div>
+            <div id="shopTab" class="card hidden">
+                <p style="font-weight:600;margin-bottom:15px;">🛒 宠物商城</p>
+                <div class="price-grid">
+                    <div class="price-item" onclick="selectPlan('free')">
+                        <div class="price-amount">免费</div>
+                        <div class="price-desc">基础功能</div>
+                    </div>
+                    <div class="price-item" onclick="selectPlan('monthly')">
+                        <div class="price-amount">¥6</div>
+                        <div class="price-desc">月卡解锁全部</div>
+                    </div>
+                    <div class="price-item" onclick="selectPlan('quarterly')">
+                        <div class="price-amount">¥15</div>
+                        <div class="price-desc">季卡省7元</div>
+                    </div>
+                    <div class="price-item" onclick="selectPlan('yearly')">
+                        <div class="price-amount">¥48</div>
+                        <div class="price-desc">年卡省24元</div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="confirmPurchase()">立即开通</button>
+                <button class="btn btn-secondary" onclick="switchTab('tasks')">返回</button>
             </div>
         </div>
     </div>
+    <div id="notification" class="notification"></div>
 
     <script>
-        let petState = { name: '', color: '#ff6b6b', level: 1, tasks: [] };
+        let petState = { name: '', color: '#ff6b6b', level: 1, tasks: [], plan: 'free' };
         let chatHistory = [];
         let currentPetIndex = 0;
         
         const AGNES_API_URL = 'https://api.agnes-ai.cn/v1/chat/completions';
         const AGNES_API_KEY = 'sk-UMO0xnCQNlCoJd8AKbnhejVNdEdr4cXsUEg24RiSHnspeMmj';
         const AGNES_MODEL = 'agnes-2.5-flash';
-        const COLORS = ['#ff6b6b','#ee5a5a','#4ecdc4','#45b7d1','#96ceb4','#27ae60','#ffeaa7','#f1c40f'];
+        const COLORS = ['#ff6b6b','#ee5a5a','#4ecdc4','#45b7d1','#96ceb4','#27ae60','#ffeaa7','#f1c40f','#dda0dd','#9b59b6','#85c1e9','#5dade2'];
+        const PLANS = {
+            free: { name: '免费', price: 0 },
+            monthly: { name: '月卡', price: 6 },
+            quarterly: { name: '季卡', price: 15 },
+            yearly: { name: '年卡', price: 48 }
+        };
 
         function init() {
             var colorGrid = document.getElementById('colorGrid');
             for (var i = 0; i < COLORS.length; i++) {
                 var div = document.createElement('div');
-                div.style.cssText = 'width:40px;height:40px;border-radius:8px;background:' + COLORS[i] + ';cursor:pointer;border:3px solid transparent;';
-                if (i === 0) div.style.borderColor = '#fff';
-                div.onclick = (function(color) {
+                div.className = 'color-option' + (i === 0 ? ' selected' : '');
+                div.style.background = COLORS[i];
+                div.onclick = (function(color, el) {
                     return function() {
+                        document.querySelectorAll('.color-option').forEach(function(e) { e.classList.remove('selected'); });
+                        el.classList.add('selected');
                         petState.color = color;
-                        document.getElementById('previewName').textContent = petState.name || '方块宠';
+                        document.getElementById('previewColor').style.background = color;
                     };
-                })(COLORS[i]);
+                })(COLORS[i], div);
                 colorGrid.appendChild(div);
             }
             loadPets();
@@ -95,7 +171,7 @@
             document.getElementById('homePage').className = 'hidden';
             document.getElementById('creationPhase').className = '';
             document.getElementById('nameInput').value = '';
-            petState = { name: '', color: '#ff6b6b', level: 1, tasks: [] };
+            petState = { name: '', color: '#ff6b6b', level: 1, tasks: [], plan: 'free' };
         };
 
         window.backToHome = function() {
@@ -108,6 +184,7 @@
             if (!name) { alert('请输入名字'); return; }
             petState.name = name;
             document.getElementById('previewName').textContent = name;
+            document.getElementById('previewColor').style.background = petState.color;
             document.getElementById('creationPhase').className = 'hidden';
             document.getElementById('previewPhase').className = '';
         };
@@ -124,21 +201,22 @@
             document.getElementById('previewPhase').className = 'hidden';
             document.getElementById('homePage').className = '';
             loadPets();
-            alert('宠物创建成功！');
+            showNotification('宠物创建成功！');
         };
 
         function loadPets() {
             var pets = JSON.parse(localStorage.getItem('blockpet_all') || '[]');
             var list = document.getElementById('petList');
             if (pets.length === 0) {
-                list.innerHTML = '<p style="color:#888;">还没有宠物，创建一个吧！</p>';
+                list.innerHTML = '<p style="color:#888;text-align:center;padding:20px;">还没有宠物，创建一个吧！</p>';
             } else {
                 list.innerHTML = '';
                 for (var i = 0; i < pets.length; i++) {
                     (function(p, idx) {
                         var div = document.createElement('div');
-                        div.style.cssText = 'padding:10px;background:rgba(255,255,255,0.05);border-radius:8px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:10px;';
-                        div.innerHTML = '<div style="width:30px;height:30px;background:' + p.color + ';border-radius:4px;"></div><span>' + p.name + '</span>';
+                        div.className = 'task-item';
+                        div.style.cursor = 'pointer';
+                        div.innerHTML = '<div style="width:40px;height:40px;background:' + p.color + ';border-radius:8px;"></div><span style="flex:1;">' + p.name + '</span><span style="color:#888;font-size:12px;">Lv.' + p.level + '</span>';
                         div.onclick = function() { selectPet(idx); };
                         list.appendChild(div);
                     })(pets[i], i);
@@ -155,9 +233,35 @@
                 document.getElementById('homePage').className = 'hidden';
                 document.getElementById('mainApp').className = '';
                 document.getElementById('mainName').textContent = petState.name;
-                document.getElementById('mainLevel').textContent = 'Lv.' + petState.level;
-                addSystemMessage('你好！我是 ' + petState.name + '，你的专属方块宠物！');
+                document.getElementById('mainLevel').textContent = petState.level;
+                document.getElementById('petCube').style.background = petState.color;
+                addSystemMessage('你好！我是 ' + petState.name + '，你的专属方块宠物！✨');
             }
+        };
+
+        window.switchTab = function(tab) {
+            document.getElementById('chatTab').className = tab === 'chat' ? 'card' : 'card hidden';
+            document.getElementById('tasksTab').className = tab === 'tasks' ? 'card' : 'card hidden';
+            document.getElementById('shopTab').className = tab === 'shop' ? 'card' : 'card hidden';
+            document.querySelectorAll('.tab').forEach(function(btn, i) {
+                btn.className = 'tab' + ((tab === 'chat' && i === 0) || (tab === 'tasks' && i === 1) ? ' active' : '');
+            });
+        };
+
+        window.showShop = function() {
+            switchTab('shop');
+        };
+
+        window.selectPlan = function(plan) {
+            document.querySelectorAll('.price-item').forEach(function(el) { el.classList.remove('selected'); });
+            event.target.closest('.price-item').classList.add('selected');
+            petState.selectedPlan = plan;
+        };
+
+        window.confirmPurchase = function() {
+            if (!petState.selectedPlan) { alert('请选择套餐'); return; }
+            var plan = PLANS[petState.selectedPlan];
+            alert('即将开通' + plan.name + ' (¥' + plan.price + ')\n\n支付方式：\n1. 微信支付\n2. 支付宝\n\n（演示版本，暂不接入支付）');
         };
 
         window.handleKeyPress = function(e) {
@@ -179,7 +283,7 @@
             scrollChat();
             
             try {
-                var systemPrompt = '你是' + petState.name + '，一个可爱的像素方块宠物。用中文回复，简短可爱。';
+                var systemPrompt = '你是' + petState.name + '，一个可爱的像素方块宠物。你会陪伴用户学习工作，提供情绪价值，温暖有趣。用中文回复，简短可爱。';
                 
                 var r = await fetch(AGNES_API_URL, {
                     method: 'POST',
@@ -191,7 +295,6 @@
                         model: AGNES_MODEL,
                         messages: [
                             { role: 'system', content: systemPrompt },
-                            ...chatHistory,
                             { role: 'user', content: message }
                         ]
                     })
@@ -200,8 +303,6 @@
                 thinkingMsg.remove();
                 
                 var reply = d.choices && d.choices[0] && d.choices[0].message ? d.choices[0].message.content : '...';
-                chatHistory.push({ role: 'user', content: message });
-                chatHistory.push({ role: 'assistant', content: reply });
                 addPetMessage(reply);
             } catch(e) {
                 thinkingMsg.remove();
@@ -210,18 +311,77 @@
             }
         }
 
+        window.addTask = function() {
+            var input = document.getElementById('taskInput');
+            var task = input.value.trim();
+            if (!task) return;
+            petState.tasks.push({ id: Date.now(), text: task, completed: false });
+            input.value = '';
+            savePets();
+            renderTasks();
+            showNotification('任务已添加！');
+        };
+
+        function renderTasks() {
+            var list = document.getElementById('taskList');
+            if (!list) return;
+            if (petState.tasks.length === 0) {
+                list.innerHTML = '<div style="text-align:center;color:#666;padding:20px;">还没有任务</div>';
+                return;
+            }
+            list.innerHTML = '';
+            for (var i = 0; i < petState.tasks.length; i++) {
+                (function(task, idx) {
+                    var div = document.createElement('div');
+                    div.className = 'task-item' + (task.completed ? ' completed' : '');
+                    div.innerHTML = '<input type="checkbox" ' + (task.completed ? 'checked' : '') + ' onchange="toggleTask(' + task.id + ')" style="width:18px;height:18px;">' +
+                                   '<span style="flex:1;">' + task.text + '</span>' +
+                                   '<button onclick="deleteTask(' + task.id + ')" style="background:none;border:none;color:#e94560;cursor:pointer;font-size:18px;">×</button>';
+                    list.appendChild(div);
+                })(petState.tasks[i], i);
+            }
+        }
+
+        window.toggleTask = function(id) {
+            for (var i = 0; i < petState.tasks.length; i++) {
+                if (petState.tasks[i].id === id) {
+                    petState.tasks[i].completed = !petState.tasks[i].completed;
+                    if (petState.tasks[i].completed) {
+                        petState.level++;
+                        showNotification('任务完成！升级了！Lv.' + petState.level);
+                    }
+                    savePets();
+                    renderTasks();
+                    document.getElementById('mainLevel').textContent = petState.level;
+                    break;
+                }
+            }
+        };
+
+        window.deleteTask = function(id) {
+            petState.tasks = petState.tasks.filter(function(t) { return t.id !== id; });
+            savePets();
+            renderTasks();
+        };
+
+        function savePets() {
+            var pets = JSON.parse(localStorage.getItem('blockpet_all') || '[]');
+            pets[currentPetIndex] = petState;
+            localStorage.setItem('blockpet_all', JSON.stringify(pets));
+        }
+
         function addUserMessage(text) {
             var msg = document.createElement('div');
+            msg.className = 'message user';
             msg.textContent = text;
-            msg.style.cssText = 'background:#4a9eff;color:#fff;padding:8px 12px;border-radius:12px;margin-bottom:8px;';
             document.getElementById('chatBox').appendChild(msg);
             scrollChat();
         }
 
         function addPetMessage(text) {
             var msg = document.createElement('div');
+            msg.className = 'message pet';
             msg.textContent = text;
-            msg.style.cssText = 'background:rgba(255,255,255,0.1);color:#ddd;padding:8px 12px;border-radius:12px;margin-bottom:8px;';
             document.getElementById('chatBox').appendChild(msg);
             scrollChat();
         }
@@ -233,6 +393,13 @@
         function scrollChat() {
             var box = document.getElementById('chatBox');
             box.scrollTop = box.scrollHeight;
+        }
+
+        function showNotification(msg) {
+            var n = document.getElementById('notification');
+            n.textContent = msg;
+            n.style.display = 'block';
+            setTimeout(function() { n.style.display = 'none'; }, 2000);
         }
 
         init();
