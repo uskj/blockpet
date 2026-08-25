@@ -9,40 +9,51 @@
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; color: #fff; }
         .container { max-width: 480px; margin: 0 auto; padding: 20px; }
         button { cursor: pointer; }
-        .btn { padding: 14px 20px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; margin: 10px 0; width: 100%; }
+        .btn { width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; margin: 10px 0; }
         .btn-primary { background: linear-gradient(135deg, #4a9eff 0%, #357abd 100%); color: #fff; }
-        .btn-success { background: linear-gradient(135deg, #4caf50 0%, #45a049 100%); color: #fff; }
         .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; }
+        .btn-success { background: linear-gradient(135deg, #4caf50 0%, #45a049 100%); color: #fff; }
         .hidden { display: none !important; }
         .card { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 20px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.1); }
         input[type="text"] { width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
         input[type="text"]:focus { border-color: #4a9eff; }
         label { color: #aaa; font-size: 12px; margin-top: 15px; display: block; }
-        .color-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 10px 0; }
+        .color-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin: 10px 0; }
         .color-option { aspect-ratio: 1; border-radius: 8px; cursor: pointer; border: 3px solid transparent; transition: all 0.2s; }
         .color-option:hover { transform: scale(1.1); }
         .color-option.selected { border-color: #fff; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        .accessory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 10px 0; }
+        .accessory-option { padding: 12px 8px; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); border-radius: 8px; text-align: center; cursor: pointer; transition: all 0.2s; font-size: 12px; }
+        .accessory-option:hover { border-color: #4a9eff; }
+        .accessory-option.selected { border-color: #4a9eff; background: rgba(74,158,255,0.2); }
+        .accessory-option .emoji { font-size: 24px; display: block; margin-bottom: 4px; }
         .chat-box { height: 250px; overflow-y: auto; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
-        .message { margin-bottom: 10px; padding: 10px 14px; border-radius: 12px; font-size: 14px; }
+        .message { margin-bottom: 10px; padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.5; }
         .message.user { background: #4a9eff; color: #fff; margin-left: 20%; border-radius: 12px 12px 0 12px; }
         .message.pet { background: rgba(255,255,255,0.1); color: #ddd; margin-right: 20%; border-radius: 12px 12px 12px 0; }
+        .message.thinking { color: #888; font-style: italic; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+        .tab { flex: 1; padding: 12px; background: rgba(255,255,255,0.05); border: none; border-radius: 8px; color: #888; font-size: 14px; cursor: pointer; }
+        .tab.active { background: #4a9eff; color: #fff; }
         .task-item { display: flex; align-items: center; gap: 10px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 8px; }
         .task-item.completed { opacity: 0.5; text-decoration: line-through; }
         .pet-info { text-align: center; margin: 20px 0; }
         .pet-name { font-size: 24px; font-weight: 700; margin-bottom: 5px; }
         .pet-level { color: #ffd700; font-size: 14px; }
-        .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
-        .tab { flex: 1; padding: 12px; background: rgba(255,255,255,0.05); border: none; border-radius: 8px; color: #888; font-size: 14px; cursor: pointer; }
-        .tab.active { background: #4a9eff; color: #fff; }
+        .cube-container { width: 200px; height: 200px; margin: 30px auto; perspective: 600px; }
+        .cube { width: 100px; height: 100px; position: relative; transform-style: preserve-3d; transform: rotateX(-25deg) rotateY(-45deg); animation: rotate 8s infinite linear; margin: 50px auto; }
+        @keyframes rotate { from { transform: rotateX(-25deg) rotateY(0deg); } to { transform: rotateX(-25deg) rotateY(360deg); } }
+        .face { position: absolute; width: 100px; height: 100px; display: grid; grid-template-columns: repeat(10, 1fr); grid-template-rows: repeat(10, 1fr); border: 1px solid rgba(0,0,0,0.3); }
+        .pixel { width: 100%; height: 100%; }
+        .front { transform: translateZ(50px); }
+        .back { transform: rotateY(180deg) translateZ(50px); }
+        .right { transform: rotateY(90deg) translateZ(50px); }
+        .left { transform: rotateY(-90deg) translateZ(50px); }
+        .top { transform: rotateX(90deg) translateZ(50px); }
+        .bottom { transform: rotateX(-90deg) translateZ(50px); }
         .notification { position: fixed; top: 20px; right: 20px; background: #4a9eff; color: #fff; padding: 12px 20px; border-radius: 8px; display: none; z-index: 1000; }
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; }
-        .modal-content { background: #1a1a2e; border-radius: 16px; padding: 30px; max-width: 320px; text-align: center; }
-        .price-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
-        .price-item { background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 15px; cursor: pointer; transition: all 0.2s; }
-        .price-item:hover { border-color: #4a9eff; background: rgba(74,158,255,0.1); }
-        .price-item.selected { border-color: #4a9eff; background: rgba(74,158,255,0.2); }
-        .price-amount { font-size: 24px; font-weight: 700; color: #ffd700; }
-        .price-desc { font-size: 12px; color: #888; margin-top: 5px; }
+        .lock-overlay { position: relative; }
+        .lock-overlay::after { content: '🔒 解锁后使用'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); padding: 8px 16px; border-radius: 20px; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -66,7 +77,9 @@
                 <label>名字</label>
                 <input type="text" id="nameInput" placeholder="给你的宠物起个名字..." maxlength="10">
                 <label>选择颜色</label>
-                <div id="colorGrid" class="color-grid"></div>
+                <div class="color-grid" id="colorGrid"></div>
+                <label>选择配饰</label>
+                <div class="accessory-grid" id="accessoryGrid"></div>
                 <button class="btn btn-success" onclick="previewPet()" style="margin-top:20px;">🔍 预览外观</button>
                 <button class="btn btn-secondary" onclick="backToHome()">返回</button>
             </div>
@@ -75,7 +88,16 @@
         <div id="previewPhase" class="hidden">
             <div class="card">
                 <p style="font-weight:600;margin-bottom:15px;">👁️ 预览</p>
-                <div id="previewColor" style="width:100px;height:100px;border-radius:12px;margin:20px auto;background:#ff6b6b;box-shadow:0 4px 20px rgba(0,0,0,0.3);"></div>
+                <div class="cube-container">
+                    <div class="cube" id="previewCube">
+                        <div class="face front" id="previewFront"></div>
+                        <div class="face back" id="previewBack"></div>
+                        <div class="face right" id="previewRight"></div>
+                        <div class="face left" id="previewLeft"></div>
+                        <div class="face top" id="previewTop"></div>
+                        <div class="face bottom" id="previewBottom"></div>
+                    </div>
+                </div>
                 <p id="previewName" style="text-align:center;font-size:20px;margin-bottom:5px;"></p>
                 <button class="btn btn-success" onclick="confirmCreation()">✅ 确认创建</button>
                 <button class="btn btn-secondary" onclick="backToEdit()">✏️ 返回修改</button>
@@ -83,95 +105,137 @@
         </div>
         
         <div id="mainApp" class="hidden">
+            <div class="cube-container">
+                <div class="cube" id="mainCube">
+                    <div class="face front" id="mainFront"></div>
+                    <div class="face back" id="mainBack"></div>
+                    <div class="face right" id="mainRight"></div>
+                    <div class="face left" id="mainLeft"></div>
+                    <div class="face top" id="mainTop"></div>
+                    <div class="face bottom" id="mainBottom"></div>
+                </div>
+            </div>
             <div class="pet-info">
-                <div id="petCube" style="width:100px;height:100px;border-radius:12px;margin:0 auto 10px;box-shadow:0 4px 20px rgba(0,0,0,0.3);"></div>
                 <div class="pet-name" id="mainName"></div>
                 <div class="pet-level">Lv.<span id="mainLevel"></span></div>
             </div>
             <div class="tabs">
                 <button class="tab active" onclick="switchTab('chat')">💬 聊天</button>
                 <button class="tab" onclick="switchTab('tasks')">📋 任务</button>
-                <button class="tab" onclick="showShop()">🛒 商城</button>
             </div>
             <div id="chatTab" class="card">
                 <div id="chatBox" class="chat-box"></div>
                 <input type="text" id="chatInput" placeholder="输入消息... (回车发送)" onkeypress="handleKeyPress(event)">
             </div>
-            <div id="tasksTab" class="card hidden">
+            <div id="tasksTab" class="card hidden lock-overlay">
                 <p style="font-weight:600;margin-bottom:15px;">📋 我的任务</p>
-                <div style="display:flex;gap:10px;margin-bottom:15px;">
-                    <input type="text" id="taskInput" placeholder="添加新任务..." style="flex:1;margin:0;">
-                    <button class="btn btn-success" onclick="addTask()" style="width:auto;margin:0;padding:12px 20px;">添加</button>
-                </div>
-                <div id="taskList"></div>
-            </div>
-            <div id="shopTab" class="card hidden">
-                <p style="font-weight:600;margin-bottom:15px;">🛒 宠物商城</p>
-                <div class="price-grid">
-                    <div class="price-item" onclick="selectPlan('free')">
-                        <div class="price-amount">免费</div>
-                        <div class="price-desc">基础功能</div>
-                    </div>
-                    <div class="price-item" onclick="selectPlan('monthly')">
-                        <div class="price-amount">¥6</div>
-                        <div class="price-desc">月卡解锁全部</div>
-                    </div>
-                    <div class="price-item" onclick="selectPlan('quarterly')">
-                        <div class="price-amount">¥15</div>
-                        <div class="price-desc">季卡省7元</div>
-                    </div>
-                    <div class="price-item" onclick="selectPlan('yearly')">
-                        <div class="price-amount">¥48</div>
-                        <div class="price-desc">年卡省24元</div>
-                    </div>
-                </div>
-                <button class="btn btn-primary" onclick="confirmPurchase()">立即开通</button>
-                <button class="btn btn-secondary" onclick="switchTab('tasks')">返回</button>
+                <p style="color:#888;text-align:center;margin-bottom:15px;">💎 解锁会员后可使用任务功能</p>
+                <button class="btn btn-primary" onclick="unlockTasks()">🔓 解锁任务功能</button>
             </div>
         </div>
     </div>
     <div id="notification" class="notification"></div>
 
     <script>
-        let petState = { name: '', color: '#ff6b6b', level: 1, tasks: [], plan: 'free' };
-        let chatHistory = [];
-        let currentPetIndex = 0;
+        var petState = { name: '', color: '#ff6b6b', accessory: 'none', level: 1, tasks: [], unlocked: false };
+        var chatHistory = [];
+        var currentPetIndex = 0;
+        var chatCount = 0;
         
-        const AGNES_API_URL = 'https://api.agnes-ai.cn/v1/chat/completions';
-        const AGNES_API_KEY = 'sk-UMO0xnCQNlCoJd8AKbnhejVNdEdr4cXsUEg24RiSHnspeMmj';
-        const AGNES_MODEL = 'agnes-2.5-flash';
-        const COLORS = ['#ff6b6b','#ee5a5a','#4ecdc4','#45b7d1','#96ceb4','#27ae60','#ffeaa7','#f1c40f','#dda0dd','#9b59b6','#85c1e9','#5dade2'];
-        const PLANS = {
-            free: { name: '免费', price: 0 },
-            monthly: { name: '月卡', price: 6 },
-            quarterly: { name: '季卡', price: 15 },
-            yearly: { name: '年卡', price: 48 }
-        };
+        var AGNES_API_URL = 'https://api.agnes-ai.cn/v1/chat/completions';
+        var AGNES_API_KEY = 'sk-UMO0xnCQNlCoJd8AKbnhejVNdEdr4cXsUEg24RiSHnspeMmj';
+        var AGNES_MODEL = 'agnes-2.5-flash';
+        
+        var COLORS = ['#ff6b6b','#ee5a5a','#4ecdc4','#45b7d1','#96ceb4','#27ae60','#ffeaa7','#f1c40f','#dda0dd','#9b59b6','#85c1e9','#5dade2'];
+        var ACCESSORIES = [
+            { id: 'none', name: '无', emoji: '❌' },
+            { id: 'hat', name: '帽子', emoji: '🎩' },
+            { id: 'glasses', name: '眼镜', emoji: '👓' },
+            { id: 'bow', name: '蝴蝶结', emoji: '🎀' },
+            { id: 'crown', name: '皇冠', emoji: '👑' }
+        ];
 
         function init() {
             var colorGrid = document.getElementById('colorGrid');
             for (var i = 0; i < COLORS.length; i++) {
-                var div = document.createElement('div');
-                div.className = 'color-option' + (i === 0 ? ' selected' : '');
-                div.style.background = COLORS[i];
-                div.onclick = (function(color, el) {
-                    return function() {
+                (function(color, idx) {
+                    var div = document.createElement('div');
+                    div.className = 'color-option' + (idx === 0 ? ' selected' : '');
+                    div.style.background = color;
+                    div.onclick = function() {
                         document.querySelectorAll('.color-option').forEach(function(e) { e.classList.remove('selected'); });
-                        el.classList.add('selected');
+                        div.classList.add('selected');
                         petState.color = color;
-                        document.getElementById('previewColor').style.background = color;
+                        updatePreview();
                     };
-                })(COLORS[i], div);
-                colorGrid.appendChild(div);
+                    colorGrid.appendChild(div);
+                })(COLORS[i], i);
             }
+            
+            var accessoryGrid = document.getElementById('accessoryGrid');
+            for (var j = 0; j < ACCESSORIES.length; j++) {
+                (function(acc, idx) {
+                    var div = document.createElement('div');
+                    div.className = 'accessory-option' + (idx === 0 ? ' selected' : '');
+                    div.innerHTML = '<span class="emoji">' + acc.emoji + '</span>' + acc.name;
+                    div.onclick = function() {
+                        document.querySelectorAll('.accessory-option').forEach(function(e) { e.classList.remove('selected'); });
+                        div.classList.add('selected');
+                        petState.accessory = acc.id;
+                        updatePreview();
+                    };
+                    accessoryGrid.appendChild(div);
+                })(ACCESSORIES[j], j);
+            }
+            
             loadPets();
+        }
+
+        function darkenColor(hex, percent) {
+            var num = parseInt(hex.replace('#',''), 16);
+            var amt = Math.round(2.55 * percent);
+            var R = Math.max(0, (num >> 16) - amt);
+            var G = Math.max(0, ((num >> 8) & 0xFF) - amt);
+            var B = Math.max(0, (num & 0xFF) - amt);
+            return '#' + (0x1000000 + R*0x10000 + G*0x100 + B).toString(16).slice(1);
+        }
+
+        function renderFace(element, baseColor, isFront) {
+            element.innerHTML = '';
+            for (var row = 0; row < 10; row++) {
+                for (var col = 0; col < 10; col++) {
+                    var pixel = document.createElement('div');
+                    pixel.className = 'pixel';
+                    var bg = baseColor;
+                    if (isFront) {
+                        if ((row === 3 || row === 4) && (col === 2 || col === 3 || col === 6 || col === 7)) {
+                            bg = row === 4 ? '#111' : '#fff';
+                        }
+                        if (row === 7 && col >= 3 && col <= 6) bg = '#e94560';
+                    }
+                    pixel.style.background = bg;
+                    element.appendChild(pixel);
+                }
+            }
+        }
+
+        function updatePreview() {
+            var faces = ['previewFront','previewBack','previewRight','previewLeft','previewTop','previewBottom'];
+            var colors = [petState.color, darkenColor(petState.color,10), darkenColor(petState.color,20),
+                         darkenColor(petState.color,10), darkenColor(petState.color,25), darkenColor(petState.color,30)];
+            for (var i = 0; i < faces.length; i++) {
+                var el = document.getElementById(faces[i]);
+                if (el) renderFace(el, colors[i], faces[i].indexOf('Front') >= 0);
+            }
+            var name = document.getElementById('nameInput').value;
+            document.getElementById('previewName').textContent = name || '方块宠';
         }
 
         window.showCreatePet = function() {
             document.getElementById('homePage').className = 'hidden';
             document.getElementById('creationPhase').className = '';
             document.getElementById('nameInput').value = '';
-            petState = { name: '', color: '#ff6b6b', level: 1, tasks: [], plan: 'free' };
+            petState = { name: '', color: '#ff6b6b', accessory: 'none', level: 1, tasks: [], unlocked: false };
         };
 
         window.backToHome = function() {
@@ -183,10 +247,9 @@
             var name = document.getElementById('nameInput').value.trim();
             if (!name) { alert('请输入名字'); return; }
             petState.name = name;
-            document.getElementById('previewName').textContent = name;
-            document.getElementById('previewColor').style.background = petState.color;
             document.getElementById('creationPhase').className = 'hidden';
             document.getElementById('previewPhase').className = '';
+            updatePreview();
         };
 
         window.backToEdit = function() {
@@ -230,38 +293,42 @@
                 petState = pets[index];
                 currentPetIndex = index;
                 chatHistory = [];
+                chatCount = 0;
                 document.getElementById('homePage').className = 'hidden';
                 document.getElementById('mainApp').className = '';
-                document.getElementById('mainName').textContent = petState.name;
-                document.getElementById('mainLevel').textContent = petState.level;
-                document.getElementById('petCube').style.background = petState.color;
+                updateMainDisplay();
                 addSystemMessage('你好！我是 ' + petState.name + '，你的专属方块宠物！✨');
             }
         };
 
+        function updateMainDisplay() {
+            var faces = ['mainFront','mainBack','mainRight','mainLeft','mainTop','mainBottom'];
+            var colors = [petState.color, darkenColor(petState.color,10), darkenColor(petState.color,20),
+                         darkenColor(petState.color,10), darkenColor(petState.color,25), darkenColor(petState.color,30)];
+            for (var i = 0; i < faces.length; i++) {
+                var el = document.getElementById(faces[i]);
+                if (el) renderFace(el, colors[i], faces[i].indexOf('Front') >= 0);
+            }
+            document.getElementById('mainName').textContent = petState.name;
+            document.getElementById('mainLevel').textContent = petState.level;
+        }
+
         window.switchTab = function(tab) {
             document.getElementById('chatTab').className = tab === 'chat' ? 'card' : 'card hidden';
             document.getElementById('tasksTab').className = tab === 'tasks' ? 'card' : 'card hidden';
-            document.getElementById('shopTab').className = tab === 'shop' ? 'card' : 'card hidden';
             document.querySelectorAll('.tab').forEach(function(btn, i) {
                 btn.className = 'tab' + ((tab === 'chat' && i === 0) || (tab === 'tasks' && i === 1) ? ' active' : '');
             });
         };
 
-        window.showShop = function() {
-            switchTab('shop');
-        };
-
-        window.selectPlan = function(plan) {
-            document.querySelectorAll('.price-item').forEach(function(el) { el.classList.remove('selected'); });
-            event.target.closest('.price-item').classList.add('selected');
-            petState.selectedPlan = plan;
-        };
-
-        window.confirmPurchase = function() {
-            if (!petState.selectedPlan) { alert('请选择套餐'); return; }
-            var plan = PLANS[petState.selectedPlan];
-            alert('即将开通' + plan.name + ' (¥' + plan.price + ')\n\n支付方式：\n1. 微信支付\n2. 支付宝\n\n（演示版本，暂不接入支付）');
+        window.unlockTasks = function() {
+            if (confirm('解锁任务功能？\n\n费用：¥6/月\n\n确认支付？')) {
+                petState.unlocked = true;
+                savePets();
+                document.getElementById('tasksTab').className = 'card';
+                document.getElementById('tasksTab').classList.remove('lock-overlay');
+                showNotification('任务功能已解锁！');
+            }
         };
 
         window.handleKeyPress = function(e) {
@@ -278,7 +345,7 @@
             
             var thinkingMsg = document.createElement('div');
             thinkingMsg.textContent = '💭 思考中...';
-            thinkingMsg.style.cssText = 'color:#888;font-style:italic;padding:10px;';
+            thinkingMsg.className = 'message thinking';
             document.getElementById('chatBox').appendChild(thinkingMsg);
             scrollChat();
             
@@ -304,70 +371,18 @@
                 
                 var reply = d.choices && d.choices[0] && d.choices[0].message ? d.choices[0].message.content : '...';
                 addPetMessage(reply);
+                chatCount++;
+                
+                if (petState.unlocked && chatCount % 10 === 0) {
+                    setTimeout(function() {
+                        addPetMessage('对了...记得完成任务哦~');
+                    }, 1000);
+                }
             } catch(e) {
                 thinkingMsg.remove();
                 addPetMessage('网络错误，请稍后重试~');
                 console.error(e);
             }
-        }
-
-        window.addTask = function() {
-            var input = document.getElementById('taskInput');
-            var task = input.value.trim();
-            if (!task) return;
-            petState.tasks.push({ id: Date.now(), text: task, completed: false });
-            input.value = '';
-            savePets();
-            renderTasks();
-            showNotification('任务已添加！');
-        };
-
-        function renderTasks() {
-            var list = document.getElementById('taskList');
-            if (!list) return;
-            if (petState.tasks.length === 0) {
-                list.innerHTML = '<div style="text-align:center;color:#666;padding:20px;">还没有任务</div>';
-                return;
-            }
-            list.innerHTML = '';
-            for (var i = 0; i < petState.tasks.length; i++) {
-                (function(task, idx) {
-                    var div = document.createElement('div');
-                    div.className = 'task-item' + (task.completed ? ' completed' : '');
-                    div.innerHTML = '<input type="checkbox" ' + (task.completed ? 'checked' : '') + ' onchange="toggleTask(' + task.id + ')" style="width:18px;height:18px;">' +
-                                   '<span style="flex:1;">' + task.text + '</span>' +
-                                   '<button onclick="deleteTask(' + task.id + ')" style="background:none;border:none;color:#e94560;cursor:pointer;font-size:18px;">×</button>';
-                    list.appendChild(div);
-                })(petState.tasks[i], i);
-            }
-        }
-
-        window.toggleTask = function(id) {
-            for (var i = 0; i < petState.tasks.length; i++) {
-                if (petState.tasks[i].id === id) {
-                    petState.tasks[i].completed = !petState.tasks[i].completed;
-                    if (petState.tasks[i].completed) {
-                        petState.level++;
-                        showNotification('任务完成！升级了！Lv.' + petState.level);
-                    }
-                    savePets();
-                    renderTasks();
-                    document.getElementById('mainLevel').textContent = petState.level;
-                    break;
-                }
-            }
-        };
-
-        window.deleteTask = function(id) {
-            petState.tasks = petState.tasks.filter(function(t) { return t.id !== id; });
-            savePets();
-            renderTasks();
-        };
-
-        function savePets() {
-            var pets = JSON.parse(localStorage.getItem('blockpet_all') || '[]');
-            pets[currentPetIndex] = petState;
-            localStorage.setItem('blockpet_all', JSON.stringify(pets));
         }
 
         function addUserMessage(text) {
@@ -393,6 +408,12 @@
         function scrollChat() {
             var box = document.getElementById('chatBox');
             box.scrollTop = box.scrollHeight;
+        }
+
+        function savePets() {
+            var pets = JSON.parse(localStorage.getItem('blockpet_all') || '[]');
+            pets[currentPetIndex] = petState;
+            localStorage.setItem('blockpet_all', JSON.stringify(pets));
         }
 
         function showNotification(msg) {
